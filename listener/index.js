@@ -1,0 +1,5 @@
+const io = require('socket.io-client')
+const socket = io.connect('http://localhost:3002')
+socket.on('event', data => console.log(data))
+socket.on('top10', data => console.log(data))
+socket.on('currentTop10', data => console.log(data))
