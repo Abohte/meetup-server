@@ -10,7 +10,10 @@ var currentTop10 = []
 
 io.on('connection', socket => {
   console.log('got connection')
-  socket.emit('currentTop10', currentTop10)
+  socket.emit('action', {
+    type: 'UPDATE_TOPICS',
+    payload: currentTop10
+  })
 })
 
 mup.stream("/2/rsvps", stream => {
@@ -25,7 +28,10 @@ mup.stream("/2/rsvps", stream => {
 
       if (!(topicNames.includes('Software Development'))) { return }
 
-      io.emit('event', item)
+      io.emit('action', {
+        type: 'ADD_RSVP',
+        payload: item
+      })
 
       topicNames.forEach(name => {
         if (topicsCounter[name]) {
@@ -56,7 +62,10 @@ mup.stream("/2/rsvps", stream => {
         return { topic, count }
       })
       console.log(top10Topics)
-      io.emit('top10', top10Topics)
+      io.emit('action', {
+        type: 'UPDATE_TOPICS',
+        payload: top10Topics
+      })
       currentTop10 = top10Topics
 
     }).on("error", e => {
